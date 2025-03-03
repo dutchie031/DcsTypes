@@ -20,7 +20,7 @@
 ---@field y number directed to the east 
 ---@field z number directed up (away from ground)
 
----@class Array<T>: { [integer]: T }
+---@class Array<T>: { [integer]: T } 
 
 
 do -- env
@@ -302,42 +302,58 @@ end
 
 do -- trigger
 
-    ---@class Trigger : MarkManager, OtherCommands, OutSoundManager, OutTextManager, TriggerAITasksManager
-    ---@field ctfColorTag 
-    ---@field getUserFlag
-    ---@field setUserFlag
-    ---@field getZone 
-    ---@field explosion 
-    ---@field smoke
-    ---@field effectSmokeBig 
-    ---@field effectSmokeStop 
-    ---@field illuminationBomb 
-    ---@field signalFlare 
-    ---@field setUnitInternalCargo
+    ---@class Trigger
+    ---@field action TriggerActions
+    ---@field misc TriggerMisc
     trigger = trigger
 
-    ---@class OutSoundManager
-    ---@field outSound
-    ---@field outSoundForCoalition
-    ---@field outSoundForCountry 
-    ---@field outSoundForGroup
-    ---@field outSoundForUnit 
-    ---@field radioTransmission
-    ---@field stopRadioTransmission 
+    ---@class TriggerMisc
+    ---@field getUserFlag fun(flagName: string) : number returns the value of a user flag.
+    ---@field getZone fun(zoneName: string) : Array<TriggerZone> returns triggerzones. Only works for cilinders really. For more detailed zone data see: env.mission.triggers.zones
+    trigger.misc = trigger.misc
 
-    ---@class OutTextManager
-    ---@field outText 
-    ---@field outTextForCoalition
-    ---@field outTextForCountry 
-    ---@field outTextForGroup 
-    ---@field outTextForUnit
+    ---@class TriggerActions : OutText, OutSound, OtherCommands, MarkCommands
+    ---@field ctfColorTag fun(unitName: string, smokeColor: SmokePlumeColor, minAlt: number?) Created a smoke plume behind a specified aircraft
+    ---@field setUserFlag fun(flagName: string, userFlagValue: boolean|number) Sets a user flag to a specified value
+    ---@field explosion fun(point: Vec3, power: number) Creates an explosion at a given point at the specified power. 
+    ---@field smoke fun(point: Vec3, color: SmokeColor) Creates colored smoke marker at a given point
+    ---@field effectSmokeBig fun(point: Vec3, effect: SmokeEffect, density: number, name: string?) Creates a large smoke effect on a vec3 point of a specified type and density. 
+    ---@field effectSmokeStop fun(name: string) Stop a smoke effect effect of the passsed name
+    ---@field illuminationBomb fun(point: Vec3, power: number) Creates an ilumination bomb that will burn for 300 seconds
+    ---@field signalFlare fun(point: Vec3, flareColor: FlareColor, azimuth: number) Creates a signal flare at the given point in the specified color. The flare will be launched in the direction of the azimuth variable. 
+    ---@field radioTransmission fun(fileName: string, point:Vec3, modulation: Modulation, loop: boolean, frequency: number, power: number, name: string?) Transmits an audio file to be broadcast over a specific frequency eneminating from the specified point. 
+    ---@field stopRadioTransmission fun(name: string) Stops a radio transmission of the passed name
+    ---@field setUnitInternalCargo fun(unitName: string, mass: number) Sets the internal cargo for the specified unit at the specified mass
+    trigger.action = trigger.action
 
-    ---@class MarkManager
-    ---@field markToAll
-    ---@field markToCoalition
-    ---@field markToGroup 
-    ---@field removeMark
-    ---@field markupToAll
+    ---@class OutSound
+    ---@field outSound fun(fileName: string) Plays a sound file to all players.
+    ---@field outSoundForCoalition fun(coalitionSide: CoalitionSide, soundFile: string) Plays a sound file to all players on the specified coalition. 
+    ---@field outSoundForCountry fun(country: CountryID, soundfile: string) Plays a sound file to all players on the specified country.
+    ---@field outSoundForGroup fun(groupId: integer, soundFile: string) Plays a sound file to all players in the specified group.
+    ---@field outSoundForUnit fun(unitId: integer, soundFile: string) Plays a sound file to all players in the specified unit.
+
+    ---@class OutText
+    ---@field outText fun(text: string, displayTime: number, clearview: boolean?) Displays the passed string of text for the specified time to all players.
+    ---@field outTextForCoalition fun(coalitionId: CoalitionSide, text: string, displayTime: number, clearview: boolean?) Displays the passed string of text for the specified time to all players belonging to the specified coalition.
+    ---@field outTextForCountry fun(country: CountryID, text: string, displayTime: number, clearview: boolean?) Displays the passed string of text for the specified time to all players belonging to the specified country.
+    ---@field outTextForGroup fun(groupId: integer, text: string, displayTime: number, clearView: boolean?) Displays the passed string of text for the specified time to all players in the specified group.
+    ---@field outTextForUnit fun(unitId: integer, text: string, displayTime: number, clearView: boolean?) Displays the passed string of text for the specified time to all players in the specified unit.
+
+    ---@class OtherCommands
+    ---@field addOtherCommand fun(name: string, userFlagName: string, userFlagValue: string) Adds a command to the "F10 Other" radio menu allowing players to call commands and set flags within the mission.
+    ---@field removeOtherCommand fun(name: string) Removes the command that matches the specified name input variable from the "F10 Other" radio menu. 
+    ---@field addOtherCommandForCoalition fun(coalitionId: CoalitionSide, name: string, userFlagName: string, userFlagValue: number) Adds a command to the "F10 Other" radio menu allowing players to call commands and set flags within the mission.
+    ---@field removeOtherCommandForCoalition fun(coalitionId: CoalitionSide, name: string) Removes the command that matches the specified name input variable from the "F10 Other" radio menu if the command was added for coalition.
+    ---@field addOtherCommandForGroup  fun(groupId: integer, name: string, userFlagName: string, userFlagValue: number) Adds a command to the "F10 Other" radio menu allowing players to call commands and set flags within the mission.
+    ---@field removeOtherCommandForGroup fun(groupId: integer, name: string) Removes the command that matches the specified name input variable from the "F10 Other" radio menu if the command exists for the specified group. 
+
+    ---@class MarkCommands 
+    ---@field markToAll fun(id: integer, text:string, point:Vec3, readOnly: boolean?, message: string?) Adds a mark point to all on the F10 map with attached text. 
+    ---@field markToCoalition fun(id: integer, text: string, point: Vec3, coalitionID: CoalitionSide, readOnly: boolean?, message: string) Adds a mark point to a coalition on the F10 map with attached text. 
+    ---@field markToGroup fun(id: integer, text: string, point: Vec3, groupID: integer, readOnly: boolean?, message: string) Adds a mark point to a group on the F10 map with attached text. 
+    ---@field removeMark fun(id: integer) Removes a mark panel from the f10 map 
+    ---@field markupToAll fun(shapeID: ShapeId, coalition: DrawCoalition, id: integer, ... : Vec3, lineColor: table, fillColor: table, lineType: )
     ---@field lineToAll
     ---@field circleToAll
     ---@field rectToAll
@@ -348,29 +364,79 @@ do -- trigger
     ---@field setMarkupText
     ---@field setMarkupFontSize
     ---@field setMarkupColor
-    ---@field setMarkupColorFill 
+    ---@field setMarkupColorFill
     ---@field setMarkupTypeLine
     ---@field setMarkupPositionEnd
-    ---@field setMarkupPositionStart
+    ---@field setMarkupPositionStart 
 
-    ---@class OtherCommands
-    ---@field addOtherCommand
-    ---@field removeOtherCommand
-    ---@field addOtherCommandForCoalition
-    ---@field removeOtherCommandForCoalition
-    ---@field addOtherCommandForGroup 
-    ---@field removeOtherCommandForGroup
+    trigger.action.markupToAll()
 
-    ---@class TriggerAITasksManager
-    ---@field setAITask
-    ---@field pushAITask
-    ---@field activateGroup
-    ---@field deactivateGroup 
-    ---@field setGroupAIOn
-    ---@field setGroupAIOff
-    ---@field groupStopMoving
-    ---@field groupContinueMoving 
+    ---@enum SmokeColor
+    trigger.smokeColor = {
+        Green = 0,
+        Red = 1, 
+        White = 2,
+        Orange = 3,
+        Blue = 4
+    }
 
+    ---@enum FlareColor 
+    trigger.flareColor = {
+        Green = 0,
+        Red = 1,
+        White = 2,
+        Yellow = 3
+    }
+
+    ---@alias SmokePlumeColor
+    ---| 0 Disabled
+    ---| 1 Green 
+    ---| 2 Red
+    ---| 3 White
+    ---| 4 Orange
+    ---| 5 Blue
+
+    ---@alias SmokeEffect
+    ---| 1 small smoke and fire
+    ---| 2 medium smoke and fire
+    ---| 3 large smoke and fire
+    ---| 4 huge smoke and fire
+    ---| 5 small smoke
+    ---| 6 medium smoke 
+    ---| 7 large smoke
+    ---| 8 huge smoke
+
+    ---@alias Modulation
+    ---| 0 AM
+    ---| 1 FM
+
+    ---@alias ShapeId
+    ---| 1 Line
+    ---| 2 Circle
+    ---| 3 Rect
+    ---| 4 Arrow
+    ---| 5 Text
+    ---| 6 Quad
+    ---| 7 Freeform
+
+    ---@alias LineType
+    ---| 0  No Line
+    ---| 1  Solid
+    ---| 2  Dashed
+    ---| 3  Dotted
+    ---| 4  Dot Dash
+    ---| 5  Long Dash
+    ---| 6  Two Dash
+
+    ---@alias DrawCoalition
+    ---| -1 All
+    ---| 0 Neutral
+    ---| 1 Red
+    ---| 2 Blue
+
+    ---@class TriggerZone
+    ---@field point Vec3
+    ---@field radius number
 
 end
 
