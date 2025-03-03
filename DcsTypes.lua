@@ -353,7 +353,7 @@ do -- trigger
     ---@field markToCoalition fun(id: integer, text: string, point: Vec3, coalitionID: CoalitionSide, readOnly: boolean?, message: string) Adds a mark point to a coalition on the F10 map with attached text. 
     ---@field markToGroup fun(id: integer, text: string, point: Vec3, groupID: integer, readOnly: boolean?, message: string) Adds a mark point to a group on the F10 map with attached text. 
     ---@field removeMark fun(id: integer) Removes a mark panel from the f10 map 
-    ---@field markupToAll fun(shapeID: ShapeId, coalition: DrawCoalition, id: integer, ... : Vec3, lineColor: table, fillColor: table, lineType: )
+    ---@field markupToAll fun(shapeID: ShapeId, coalition: DrawCoalition, id: integer, ... : Vec3, lineColor: table, fillColor: table, lineType: LineType)
     ---@field lineToAll
     ---@field circleToAll
     ---@field rectToAll
