@@ -9,16 +9,19 @@
 
 ]]
 
+---Vec2 is a 2D-vector for the ground plane as a reference plane. 
 ---@class Vec2 
 ---@field x number
 ---@field y  number
 
+---Vec3 type is a 3D-vector. It is a table that has following format
 ---@class Vec3 
----@field x number
----@field y number
----@field z number
+---@field x number directed to the north 
+---@field y number directed to the east 
+---@field z number directed up (away from ground)
 
 ---@class Array<T>: { [integer]: T }
+
 
 do -- env
     ---@class env
@@ -300,7 +303,7 @@ end
 do -- trigger
 
     ---@class Trigger : MarkManager, OtherCommands, OutSoundManager, OutTextManager, TriggerAITasksManager
-    ---@field ctfColorTag
+    ---@field ctfColorTag 
     ---@field getUserFlag
     ---@field setUserFlag
     ---@field getZone 
@@ -371,12 +374,17 @@ do -- trigger
 
 end
 
-
----@class Unit : Object
-
 ---@class Object
 ---@field getName fun(self) : string
 Object = Object
+
+---@class CoalitionObject
+
+---@class StaticObject : Object
+
+---@class Unit : Object
+
+
 
 ---@enum ObjectCategory
 Object.Category = {
@@ -414,13 +422,12 @@ country.id = {
   }
 
 
----@class CoalitionObject
+
 
 ---@class Airbase : Object, CoalitionObject
 
 
 ---@class Group
----@field 
 Group = Group
 
 ---@enum GroupCategory
@@ -432,4 +439,3 @@ Group.Category = {
     TRAIN         = 4,
 }
 
----@class StaticObject : Object
