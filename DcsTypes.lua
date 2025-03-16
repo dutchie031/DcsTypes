@@ -520,10 +520,55 @@ do -- net
     --@field recv_chat 
 end
 
+do -- Country
+
+    
+---@class CountrySingleton
+---@field name table<number,string> 
+country = country
+
+
+---@enum CountryID
+country.id = {
+    RUSSIA = 1,
+    UKRAINE = 2,
+    USA = 3,
+    TURKEY = 4,
+    UK = 5,
+    FRANCE = 6,
+    GERMANY = 7,
+    CANADA = 8,
+    SPAIN = 9,
+    THE_NETHERLANDS = 10,
+    BELGIUM = 11,
+    NORWAY = 12,
+    DENMARK = 13,
+    ISRAEL = 14,
+    GEORGIA = 15,
+    INSURGENTS = 16,
+    ABKHAZIA = 17,
+    SOUTH_OSETIA = 18,
+    ITALY = 19
+  }
+
+    
+end
+
 --========================
 -- Classes
 --========================
 
+
+do -- Controller
+
+---@class Controller
+Controller = Controller
+
+    --[[
+        TODO: controller
+    ]]
+
+end
 
 do -- Object
 
@@ -555,51 +600,101 @@ end
 
 do --SceneryObject
 
-    ---@class SceneryObject
+    ---@class SceneryObject : Object
     ---@field getLife fun(self:SceneryObject):number gets the life of a sceneryObject
     ---@field getDescByName fun(typeName:string):table gets the description based on the typename
     SceneryObject = SceneryObject
 
 end
 
----@class CoalitionObject
+do --CoalitionObject
 
----@class StaticObject : Object
+    ---@class CoalitionObject : Object
+    ---@field getCoalition fun(self:CoalitionObject):CoalitionSide Returns an enumerator that defines the coalition that an object currently belongs to. 
+    ---@field getCountry fun(self:CoalitionObject):CountryID Returns an enumerator that defines the country that an object currently belongs to. 
+    CoalitionObject = CoalitionObject
 
----@class Unit : Object
+end
+
+do --Unit
+
+    ---@class Unit : CoalitionObject
+    ---@field getByName fun(name: string): Unit?
+    ---@field getDescByName fun(typeName: string): table? 
+    ---@field isActive fun(self:Unit): boolean Returns a boolean value if the unit is activated
+    ---@field getPlayerName fun(self:Unit): string? Returns a string value of the name of the player if the unit is currently controlled by a player
+    ---@field getID fun(self:Unit): number Returns a number which defines the unique mission id of a given object. 
+    ---@field getNumber fun(self:Unit):number Returns a numerical value of the default index of the specified unit within the group as defined within the mission editor or addGroup scripting function. 
+    ---@field getCategoryEx fun(self:Unit):number Returns an enumerator of the category for the specific object. 
+    ---@field getObjectID fun(self:Unit):number Returns the runtime object Id associated with the unit.
+    ---@field getController fun(self:Unit):Controller Returns the controller of the specified object. 
+    ---@field getGroup fun(self:Unit):Group Gets the group of the unit
+    ---@field getCallsign fun(self:Unit): string Returns a localized string of the units callsign
+    ---@field getLife fun(self:Unit): number Returns the current "life" of a unit.
+    ---@field getLife0 fun(self:Unit):number Returns the initial life value of a unit.
+    ---@field getFuel  fun(self:Unit):number Returns a percentage of the current fuel remaining in an aircraft's inventory based on the maximum possible fuel load.
+    ---@field getAmmo fun(self:Unit):table returns ammo table TODO: specify table
+    ---@field getSensors fun(self:Unit):table returns sensors table TODO: Specify table
+    ---@field hasSensors fun(self:Unit, sensorType: SensorType?, subType:OpticType|RadarType|nil) : boolean Returns true if the unit has the specified sensors.
+    ---@field getRadar fun(self:Unit) : isOperational:boolean, mostInteresting: Object Returns two values. The first value is a boolean indicating if any radar on the Unit is operational.
+    ---@field getDrawArgumentValue fun(self:Unit, arg:number): number Returns the current value for an animation argument on the external model of the given object
+    ---@field getNearestCargos fun(self:Unit): table Returns a table of friendly cargo objects indexed numerically and sorted by distance from the helicopter. 
+    ---@field enableEmission fun(self:Unit, setting:boolean) Sets the passed group or unit objects radar emitters on or off.
+    ---@field getDescentCapacity fun(self:Unit):number Returns the number of infantry that can be embark onto the aircraft.
+    Unit=Unit
+
+
+    ---@enum SensorType
+    Unit.SensorType = {
+        OPTIC     = 0,
+        RADAR     = 1,
+        IRST      = 2,
+        RWR       = 3
+    }
+
+    ---@enum OpticType
+    Unit.OpticType = {
+        TV     = 0, --TV-sensor
+        LLTV   = 1, --Low-level TV-sensor
+        IR     = 2  --Infra-Red optic sensor
+    }
+
+    ---@enum RadarType
+    Unit.RadarType = {
+        AS    = 0, --air search radar
+        SS    = 1 --surface/land search radar
+      }
+
+    --[[
+        TODO: AMMO TABLE
+        TODO: SENSORS TABLE
+    ]]
+end
+
+do --StaticObject
+    
+    ---@class StaticObject : CoalitionObject
+    ---@field getByName fun(name:string): StaticObject? Returns a static object by name
+    ---@field getDescByName fun(typeName: string): table? returns the description of this static object type
+    ---@field getID fun(self:StaticObject):number Returns a number which defines the unique mission id of a given object. 
+    ---@field getLife fun(self:StaticObject) number Returns the current "life" of a static object.
+    ---@field getCargoDisplayName fun(self:StaticObject): string Returns a string of a cargo objects mass in the format ' mass kg' 
+    ---@field getCargoWeight fun(self:StaticObject): number Returns the mass of a cargo object measured in kg. 
+    ---@field getDrawArgumentValue fun(self:Unit, arg:number): number Returns the current value for an animation argument on the external model of the given object 
+    StaticObject = StaticObject
+    
+end
+
+do -- Airbase
+
+    ---@class Airbase: CoalitionObject
+    
+
+
+end
 
 
 
-
-
-country = country
----@enum CountryID
-country.id = {
-    RUSSIA = 1,
-    UKRAINE = 2,
-    USA = 3,
-    TURKEY = 4,
-    UK = 5,
-    FRANCE = 6,
-    GERMANY = 7,
-    CANADA = 8,
-    SPAIN = 9,
-    THE_NETHERLANDS = 10,
-    BELGIUM = 11,
-    NORWAY = 12,
-    DENMARK = 13,
-    ISRAEL = 14,
-    GEORGIA = 15,
-    INSURGENTS = 16,
-    ABKHAZIA = 17,
-    SOUTH_OSETIA = 18,
-    ITALY = 19
-  }
-
-
-
-
----@class Airbase : Object, CoalitionObject
 
 
 ---@class Group
