@@ -688,8 +688,39 @@ end
 do -- Airbase
 
     ---@class Airbase: CoalitionObject
-    
+    ---@field getByName fun(name:string): Airbase?  Gets an Airfield by name
+    ---@field getDescByName fun(typeName: string): table? Gets airfield description
+    ---@field getCallsign fun(self:Airbase): string
+    ---@field getUnit fun(self:Airbase): Unit gets the unit associated with the airbase. (eg. Aircraft Carrier)
+    ---@field getID fun(self:Airbase): number Returns a number which defines the unique mission id of a given object. 
+    ---@field getCategoryEx fun(self:Airbase):number Get category type
+    ---@field getParking fun(self:Airbase, available:boolean?): Array<ParkingSpot> Returns a table of parking data for a given airbase.
+    ---@field getRunways
+    ---@field getTechObjectPos
+    ---@field getDispatcherTowerPos
+    ---@field getRadioSilentMode
+    ---@field setRadioSilentMode
+    ---@field autoCapture
+    ---@field autoCaptureIsOn
+    ---@field setCoalition
+    ---@field getWarehouse
+    Airbase = Airbase
 
+    ---@class ParkingSpot
+    ---@field Term_Index number index
+    ---@field vTerminalPos Vec3 Position
+    ---@field TO_AC boolean
+    ---@field Term_Index_0 number 
+    ---@field Term_Type TerminalType terminal type, see TerminalType
+    ---@field fDistToRW number distance to runway
+
+    ---@alias TerminalType
+    ---| 16  Valid spawn points on runway
+    ---| 40  Helicopter only spawn  
+    ---| 68  Hardened Air Shelter
+    ---| 72  Open/Shelter air airplane only
+    ---| 100  Small shelter
+    ---| 104 Open air spawn
 
 end
 
