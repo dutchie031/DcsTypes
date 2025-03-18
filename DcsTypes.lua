@@ -7,6 +7,13 @@
 
     Authored by: Dutchie
 
+    TODO: GetCategory proper types return
+    TODO: Description table per type
+    TODO: define fields of MissionGroupTable 
+    TODO: define fields for Controller class
+    TODO: AMMO TABLE for CoalitionObject getAmmo
+    TODO: SENSORS TABLE for CoalitionObject getSensors
+
 ]]
 
 ---Vec2 is a 2D-vector for the ground plane as a reference plane. 
@@ -255,11 +262,6 @@ do -- coalition
     ---@field getCountryCoalition fun(countryID: CountryID) : CoalitionSide returns coalitionID for a specific countryID 
     coalition = coalition
 
-
-    --[[
-        TODO: Check ref points
-    ]]
-
     ---@class RefPoint
     ---@field callsign number
     ---@field type number
@@ -267,11 +269,7 @@ do -- coalition
 
 
     do -- group tables
-        --[[
-            TODO: Group Tables
-        ]]
-
-
+    
         ---@class MissionGroupTable
     end
 
@@ -564,9 +562,6 @@ do -- Controller
 ---@class Controller
 Controller = Controller
 
-    --[[
-        TODO: controller
-    ]]
 
 end
 
@@ -665,10 +660,6 @@ do --Unit
         SS    = 1 --surface/land search radar
       }
 
-    --[[
-        TODO: AMMO TABLE
-        TODO: SENSORS TABLE
-    ]]
 end
 
 do --StaticObject
@@ -695,15 +686,15 @@ do -- Airbase
     ---@field getID fun(self:Airbase): number Returns a number which defines the unique mission id of a given object. 
     ---@field getCategoryEx fun(self:Airbase):number Get category type
     ---@field getParking fun(self:Airbase, available:boolean?): Array<ParkingSpot> Returns a table of parking data for a given airbase.
-    ---@field getRunways
-    ---@field getTechObjectPos
-    ---@field getDispatcherTowerPos
-    ---@field getRadioSilentMode
-    ---@field setRadioSilentMode
-    ---@field autoCapture
-    ---@field autoCaptureIsOn
-    ---@field setCoalition
-    ---@field getWarehouse
+    ---@field getRunways fun(self:Airbase): Array<Runway> Returns a table with runway information like length, width, course, and Name. 
+    ---@field getTechObjectPos fun(self:Airbase, objectType:number|string): Vec3 Returns a table of vec3 objects corresponding to the passed value.
+    ---@field getDispatcherTowerPos fun(self:Airbase): Vec3 Returns the tower position
+    ---@field getRadioSilentMode fun(self:Airbase): boolean Returns a boolean value for whether or not the ATC for the passed airbase object has been silenced. 
+    ---@field setRadioSilentMode fun(self:Airbase, silent:boolean) Sets the ATC belonging to an airbase object to be silent and unresponsive.
+    ---@field autoCapture fun(self:Airbase, setting:boolean) Enables or disables the airbase and FARP auto capture game mechanic where ownership of a base can change based on the presence of ground forces or the default setting assigned in the editor. 
+    ---@field autoCaptureIsOn fun(self:Airbase): boolean Returns the current autoCapture setting for the passed base. 
+    ---@field setCoalition fun(self:Airbase, side:CoalitionSide) Changes airbase's coalition to the set value.
+    ---@field getWarehouse fun(self:Airbase): Warehouse Returns the warehouse object associated with the airbase object.
     Airbase = Airbase
 
     ---@class ParkingSpot
@@ -713,6 +704,20 @@ do -- Airbase
     ---@field Term_Index_0 number 
     ---@field Term_Type TerminalType terminal type, see TerminalType
     ---@field fDistToRW number distance to runway
+
+    ---@class Runway
+    ---@field course number
+    ---@field Name string
+    ---@field position Vec3
+    ---@field length number
+    ---@field width number
+
+    ---@enum AirbaseCategory
+    Airbase.Category = {
+        AIRDROME = 0,
+        HELIPAD = 1, 
+        SHIP = 2,
+    }
 
     ---@alias TerminalType
     ---| 16  Valid spawn points on runway
@@ -724,19 +729,119 @@ do -- Airbase
 
 end
 
+do --Warehouse
 
+    ---@class Warehouse
+    ---@field getByName fun(name:string):Warehouse Returns an instance of the calling class for the object of a specified name.
+    ---@field getCargoAsWarehouse fun(object:StaticObject):Warehouse Returns a warehouse object that exists within the passed Static Object cargo crate.
+    ---@field addItem fun(self:Warehouse, itemType:string|table, count:number) Adds the passed amount of a given item to the warehouse. 
+    ---@field getItemCount fun(self:Warehouse, itemType:string|table): number Returns the number of the passed type of item currently in a warehouse object.
+    ---@field setItem fun(self:Warehouse, itemType: string|table, count:number) Sets the passed amount of a given item to the warehouse. 
+    ---@field removeItem fun(self:Warehouse, itemType:string|table, count:number) Removes the amount of the passed item from the warehouse. 
+    ---@field addLiquid fun(self:Warehouse, liquidType:LiquidType, count:number) Adds the passed amount of a liquid fuel into the warehouse inventory 
+    ---@field getLiquidAmount fun(self:Warehouse, liquidType:LiquidType): number Returns the amount of the passed liquid type within a given warehouse.
+    ---@field setLiquidAmount fun(self:Warehouse, liquidType:LiquidType, count:number) Sets the passed amount of a liquid fuel into the warehouse inventory 
+    ---@field removeLiquid fun(self:Warehouse, liquidType:LiquidType, count:number) Removes the set amount of liquid from the inventory in a warehouse. 
+    ---@field getOwner fun(self:Warehouse): Airbase Returns the airbase object associated with the warehouse object 
+    ---@field getInventory fun(self:Warehouse, itemType: string|table): table Returns a full itemized list of everything currently in a warehouse.
+    Warehouse = Warehouse
 
+    ---@alias LiquidType
+    ---|0 jetfuel
+    ---|1 Aviation gasoline
+    ---|2 MW50
+    ---|3 Diesel
 
+end
 
----@class Group
-Group = Group
+do -- Weapon
 
----@enum GroupCategory
-Group.Category = {
-    AIRPLANE      = 0,
-    HELICOPTER    = 1,
-    GROUND        = 2,
-    SHIP          = 3,
-    TRAIN         = 4,
-}
+    ---@class Weapon : CoalitionObject
+    ---@field getLauncher fun(self:Weapon): Unit Returns the Unit object that had launched the weapon.
+    ---@field getTarget fun(self:Weapon): Object? Returns the target object that the weapon is guiding to. 
+    ---@field getCategoryEx fun(self:Weapon): ObjectCategory Returns an enumerator of the category for the specific object. 
+    Weapon = Weapon
 
+    ---@enum WeaponCategory
+    Weapon.Category = {
+        SHELL = 0,
+        MISSILE = 1,
+        ROCKET = 2,
+        BOMB =3
+    }
+
+    ---@enum GuidanceType
+    Weapon.GuidanceType = {
+        INS               =   1,
+        IR                =   2,
+        RADAR_ACTIVE      =   3,
+        RADAR_SEMI_ACTIVE =   4,
+        RADAR_PASSIVE     =   5,
+        TV                =   6,
+        LASER             =   7,
+        TELE              =   8
+    }
+
+    ---@enum MissileCategory
+    Weapon.MissileCategory = {
+        AAM       =   1,
+        SAM       =   2,
+        BM        =   3,
+        ANTI_SHIP =   4,
+        CRUISE    =   5,
+        OTHER     =   6
+    }
+
+    ---@enum WarheadType
+    Weapon.WarheadType = {
+        AP                = 0,
+        HE                = 1,
+        SHAPED_EXPLOSIVE  = 2
+    }
+
+end
+
+do --Group
+
+    ---@class Group
+    ---@field getByName fun(name:string): Group? gets group by name
+    ---@field isExist fun(self:Group) : boolean checks if the Group currently exists
+    ---@field activate fun( )
+    ---@field destroy
+    ---@field getCategory
+    ---@field getCoalition
+    ---@field getName
+    ---@field getID
+    ---@field getUnit
+    ---@field getUnits
+    ---@field getSize
+    ---@field getInitialSize
+    ---@field getController
+    ---@field enableEmission
+    Group = Group
+
+    ---@enum GroupCategory
+    Group.Category = {
+        AIRPLANE      = 0,
+        HELICOPTER    = 1,
+        GROUND        = 2,
+        SHIP          = 3,
+        TRAIN         = 4,
+    }
+
+end
+
+do --Spot
+
+    ---@class Spot
+    ---@field createInfraRed fun(source:Object, localPoint: Vec3?, targetPoint:Vec3, lasercode:number?):Spot Creates an infrared ray emanating from the given object to a point in 3d space. Can be seen with night vision goggles. 
+    ---@field createLaser fun(source:Object, localRef: Vec3, targetPoint:Vec3, lasercode:number?):Spot Creates a laser ray emanating from the given object to a point in 3d space. 
+    ---@field destroy fun(self:Spot) destroys the laser/ir beam
+    ---@field getCategory fun(self:Spot) : ObjectCategory
+    ---@field getPoint fun(self:Spot): Vec3 
+    ---@field setPoint fun(self:Spot, point:Vec3) sets the target spot
+    ---@field getCode fun(self:Spot): number Returns the number that is used to define the laser code for which laser designation can track.
+    ---@field setCode fun(self:Spot, code:number) sets the laster code.
+    Spot = Spot
+
+end
