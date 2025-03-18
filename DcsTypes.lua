@@ -806,7 +806,7 @@ do --Group
     ---@class Group
     ---@field getByName fun(name:string): Group? gets group by name
     ---@field isExist fun(self:Group) : boolean checks if the Group currently exists
-    ---@field activate fun( )
+    ---@field activate fun(self:
     ---@field destroy
     ---@field getCategory
     ---@field getCoalition
