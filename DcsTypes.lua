@@ -577,7 +577,7 @@ Controller = Controller
     
         ---@enum WeaponExpend
         AI.Task.WeaponExpend = {
-            
+
         }
 
     end
@@ -872,168 +872,201 @@ do -- Weapon
     end
 
     do -- AI
+
+        ---@class AI
+        AI = AI
+
         AI = {
+            -- AI.Option
             Option = {
+              -- AI.Option.Air
               Air = {
+                
+                ---@enum AI.Option.Air.id
                 id = {
-                  JETT_TANKS_IF_EMPTY = "25"
-                  SILENCE = "7"
-                  ROE = "0"
-                  RADAR_USING = "3"
-                  OPTION_RADIO_USAGE_ENGAGE = "22"
-                  PROHIBIT_AG = "17"
-                  ECM_USING = "13"
-                  PROHIBIT_WP_PASS_REPORT = "19"
-                  PROHIBIT_AA = "14"
-                  REACTION_ON_THREAT = "1"
-                  PREFER_VERTICAL = "32"
-                  FORCED_ATTACK = "26"
-                  PROHIBIT_AB = "16"
-                  RTB_ON_OUT_OF_AMMO = "10"
-                  MISSILE_ATTACK = "18"
-                  PROHIBIT_JETT = "15"
-                  OPTION_RADIO_USAGE_CONTACT = "21"
-                  FLARE_USING = "4"
-                  OPTION_RADIO_USAGE_KILL = "23"
-                  FORMATION = "5"
-                  RTB_ON_BINGO = "6"
-                  NO_OPTION = "-1"
-                }
+                  JETT_TANKS_IF_EMPTY = "25",
+                  SILENCE = "7",
+                  ROE = "0",
+                  RADAR_USING = "3",
+                  OPTION_RADIO_USAGE_ENGAGE = "22",
+                  PROHIBIT_AG = "17",
+                  ECM_USING = "13",
+                  PROHIBIT_WP_PASS_REPORT = "19",
+                  PROHIBIT_AA = "14",
+                  REACTION_ON_THREAT = "1",
+                  PREFER_VERTICAL = "32",
+                  FORCED_ATTACK = "26",
+                  PROHIBIT_AB = "16",
+                  RTB_ON_OUT_OF_AMMO = "10",
+                  MISSILE_ATTACK = "18",
+                  PROHIBIT_JETT = "15",
+                  OPTION_RADIO_USAGE_CONTACT = "21",
+                  FLARE_USING = "4",
+                  OPTION_RADIO_USAGE_KILL = "23",
+                  FORMATION = "5",
+                  RTB_ON_BINGO = "6",
+                  NO_OPTION = "-1",
+                },
+
                 val = {
+                  ---@enum AI.Option.Air.val.FLARE_USING
                   FLARE_USING = {
-                    WHEN_FLYING_NEAR_ENEMIES = "3"
-                    WHEN_FLYING_IN_SAM_WEZ = "2"
-                    AGAINST_FIRED_MISSILE = "1"
-                    NEVER = "0"
-                  }
+                    WHEN_FLYING_NEAR_ENEMIES = "3",
+                    WHEN_FLYING_IN_SAM_WEZ = "2",
+                    AGAINST_FIRED_MISSILE = "1",
+                    NEVER = "0",
+                  },
+
+                  ---@enum AI.Option.Air.val.RADAR_USING
                   RADAR_USING = {
-                    FOR_ATTACK_ONLY = "1"
-                    FOR_SEARCH_IF_REQUIRED = "2"
-                    NEVER = "0"
-                    FOR_CONTINUOUS_SEARCH = "3"
-                  }
+                    FOR_ATTACK_ONLY = "1",
+                    FOR_SEARCH_IF_REQUIRED = "2",
+                    NEVER = "0",
+                    FOR_CONTINUOUS_SEARCH = "3",
+                  },
+
+                  ---@enum AI.Option.Air.val.REACTION_ON_THREAT
                   REACTION_ON_THREAT = {
-                    BYPASS_AND_ESCAPE = "3"
-                    EVADE_FIRE = "2"
-                    NO_REACTION = "0"
-                    PASSIVE_DEFENCE = "1"
-                    ALLOW_ABORT_MISSION = "4"
-                  }
+                    BYPASS_AND_ESCAPE = "3",
+                    EVADE_FIRE = "2",
+                    NO_REACTION = "0",
+                    PASSIVE_DEFENCE = "1",
+                    ALLOW_ABORT_MISSION = "4",
+                  },
+
+                  ---@enum AI.Option.Air.val.MISSILE_ATTACK
                   MISSILE_ATTACK = {
-                    HALF_WAY_RMAX_NEZ = "2"
-                    MAX_RANGE = "0"
-                    TARGET_THREAT_EST = "3"
-                    RANDOM_RANGE = "4"
-                    NEZ_RANGE = "1"
-                  }
+                    HALF_WAY_RMAX_NEZ = "2",
+                    MAX_RANGE = "0",
+                    TARGET_THREAT_EST = "3",
+                    RANDOM_RANGE = "4",
+                    NEZ_RANGE = "1",
+                  },
+
+                  ---@enum AI.Option.Air.val.ECM_USING
                   ECM_USING = {
-                    ALWAYS_USE = "3"
-                    NEVER_USE = "0"
-                    USE_IF_DETECTED_LOCK_BY_RADAR = "2"
-                    USE_IF_ONLY_LOCK_BY_RADAR = "1"
-                  }
+                    ALWAYS_USE = "3",
+                    NEVER_USE = "0",
+                    USE_IF_DETECTED_LOCK_BY_RADAR = "2",
+                    USE_IF_ONLY_LOCK_BY_RADAR = "1",
+                  },
+
+                  ---@enum AI.Option.Air.val.ROE
                   ROE = {
-                    WEAPON_FREE = "0"
-                    RETURN_FIRE = "3"
-                    OPEN_FIRE = "2"
-                    WEAPON_HOLD = "4"
-                    OPEN_FIRE_WEAPON_FREE = "1"
-                  }
+                    WEAPON_FREE = "0",
+                    RETURN_FIRE = "3",
+                    OPEN_FIRE = "2",
+                    WEAPON_HOLD = "4",
+                    OPEN_FIRE_WEAPON_FREE = "1",
+                  },
                 }
-              }
+              },
               Ground = {
+                ---@enum AiOptionGroundId
                 id = {
-                  EVASION_OF_ARM = "31"
-                  ALARM_STATE = "9"
-                  DISPERSE_ON_ATTACK = "8"
-                  ENGAGE_AIR_WEAPONS = "20"
-                  AC_ENGAGEMENT_RANGE_RESTRICTION = "24"
-                  FORMATION = "5"
-                  ROE = "0"
-                  NO_OPTION = "-1"
-                }
+                  EVASION_OF_ARM = "31",
+                  ALARM_STATE = "9",
+                  DISPERSE_ON_ATTACK = "8",
+                  ENGAGE_AIR_WEAPONS = "20",
+                  AC_ENGAGEMENT_RANGE_RESTRICTION = "24",
+                  FORMATION = "5",
+                  ROE = "0",
+                  NO_OPTION = "-1",
+                },
+                
                 val = {
+                  ---@enum AiGroundAlarmState
                   ALARM_STATE = {
-                    AUTO = "0"
-                    GREEN = "1"
-                    RED = "2"
-                  }
+                    AUTO = "0",
+                    GREEN = "1",
+                    RED = "2",
+                  },
+                  ---@enum AiGroundROE
                   ROE = {
-                    OPEN_FIRE = "2"
-                    WEAPON_HOLD = "4"
+                    OPEN_FIRE = "2",
+                    WEAPON_HOLD = "4",
                     RETURN_FIRE = "3"
                   }
                 }
-              }
+              },
               Naval = {
+                ---@enum AiOptionNavalId
                 id = {
-                  ROE = "0"
-                  NO_OPTION = "-1"
-                }
+                  ROE = "0",
+                  NO_OPTION = "-1",
+                },
                 val = {
+                    
+                  ---@enum AiNavalROE
                   ROE = {
-                    OPEN_FIRE = "2"
-                    WEAPON_HOLD = "4"
-                    RETURN_FIRE = "3"
-                  }
+                    OPEN_FIRE = "2",
+                    WEAPON_HOLD = "4",
+                    RETURN_FIRE = "3",
+                  },
                 }
               }
-            }
+            },
             Task = {
+            
+              ---@enum AI.OrbitPattern
               OrbitPattern = {
-                RACE_TRACK = "Race-Track"
-                CIRCLE = "Circle"
-              }
+                RACE_TRACK = "Race-Track",
+                CIRCLE = "Circle",
+              },
+
+
               Designation = {
-                WP = "WP"
-                NO = "No"
-                LASER = "Laser"
-                IR_POINTER = "IR-Pointer"
-                AUTO = "Auto"
-              }
+                WP = "WP",
+                NO = "No",
+                LASER = "Laser",
+                IR_POINTER = "IR-Pointer",
+                AUTO = "Auto",
+              },
               TurnMethod = {
-                FLY_OVER_POINT = "Fly Over Point"
-                FIN_POINT = "Fin Point"
-              }
+                FLY_OVER_POINT = "Fly Over Point",
+                FIN_POINT = "Fin Point",
+              },
               VehicleFormation = {
-                VEE = "Vee"
-                ECHELON_RIGHT = "EchelonR"
-                OFF_ROAD = "Off Road"
-                RANK = "Rank"
-                ECHELON_LEFT = "EchelonL"
-                ON_ROAD = "On Road"
-                CONE = "Cone"
-                DIAMOND = "Diamond"
-              }
+                VEE = "Vee",
+                ECHELON_RIGHT = "EchelonR",
+                OFF_ROAD = "Off Road",
+                RANK = "Rank",
+                ECHELON_LEFT = "EchelonL",
+                ON_ROAD = "On Road",
+                CONE = "Cone",
+                DIAMOND = "Diamond",
+              },
               AltitudeType = {
-                RADIO = "RADIO"
-                BARO = "BARO"
-              }
+                RADIO = "RADIO",
+                BARO = "BARO",
+              },
               WaypointType = {
-                TAKEOFF = "TakeOff"
-                TAKEOFF_PARKING = "TakeOffParking"
-                TURNING_POINT = "Turning Point"
-                TAKEOFF_PARKING_HOT = "TakeOffParkingHot"
-                LAND = "Land"
-              }
+                TAKEOFF = "TakeOff",
+                TAKEOFF_PARKING = "TakeOffParking",
+                TURNING_POINT = "Turning Point",
+                TAKEOFF_PARKING_HOT = "TakeOffParkingHot",
+                LAND = "Land",
+              },
               WeaponExpend = {
-                QUARTER = "Quarter"
-                TWO = "Two"
-                ONE = "One"
-                FOUR = "Four"
-                HALF = "Half"
-                ALL = "All"
-              }
-            }
+                QUARTER = "Quarter",
+                TWO = "Two",
+                ONE = "One",
+                FOUR = "Four",
+                HALF = "Half",
+                ALL = "All",
+              },
+            },
+            
+            ---@enum AiSkill AI.Skill
             Skill = {
-              PLAYER = "Player"
-              AVERAGE = "Average"
-              HIGH = "High"
-              EXCELLENT = "Excellent"
-              GOOD = "Good"
+              PLAYER = "Player",
+              AVERAGE = "Average",
+              HIGH = "High",
+              EXCELLENT = "Excellent",
+              GOOD = "Good",
               CLIENT = "Client"
             }
-          } 
+          }
     
     end
 
