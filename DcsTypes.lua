@@ -563,6 +563,42 @@ do -- Controller
 Controller = Controller
 
 
+---@alias TaskType
+---| "NoTask"
+---| "AttackGroup" attack group
+---| 
+
+---@class Task
+---@field id TaskType
+
+    do -- Task Aliases
+    
+        AI = AI
+    
+        ---@enum WeaponExpend
+        AI.Task.WeaponExpend = {
+            
+        }
+
+    end
+
+    do -- Main Tasks
+    
+        ---@class MainTask : Task
+    
+        ---@class AttackGroup : MainTask
+        ---@field params AttackGroupParams
+        
+        ---@class AttackGroupParams
+        ---@field groupId number
+        ---@field weaponType WeaponFlag?
+        ---@
+
+    end
+
+---@class EnrouteTask : Task
+
+
 end
 
 do -- Object
@@ -770,6 +806,71 @@ do -- Weapon
         BOMB =3
     }
 
+    do -- WeaponFlag
+    ---@alias WeaponFlag
+    ---| 0 No Weapon
+    ---| 2 LGB
+    ---| 4 TvGB
+    ---| 8 SNSGB
+    ---| 16 HEBomb
+    ---| 32 Penetrator
+    ---| 64 NapalmBomb
+    ---| 128 FAEBomb
+    ---| 256 ClusterBomb
+    ---| 512 Dispencer
+    ---| 1024 CandleBomb
+    ---| 2147483648 ParachuteBomb
+    ---| 14 GuidedBomb (LGB + TvGB + SNSGB)
+    ---| 2147485680 AnyUnguidedBomb (HeBomb + Penetrator + NapalmBomb + FAEBomb + ClusterBomb + Dispencer + CandleBomb + ParachuteBomb)
+    ---| 2147485694 AnyBomb (GuidedBomb + AnyUnguidedBomb)
+    ---| 2048 LightRocket 
+    ---| 4096 MarkerRocket 
+    ---| 8192 CandleRocket
+    ---| 16384 HeavyRocket
+    ---| 30720 AnyRocket (LightRocket + MarkerRocket + CandleRocket + HeavyRocket)
+    ---| 32768 AntiRadarMissile 
+    ---| 65536 AntiShipMissile
+    ---| 131072 AntiTankMissile
+    ---| 262144 FireAndForgetASM
+    ---| 524288 LaserASM
+    ---| 1048576 TeleASM
+    ---| 2097152 CruiseMissile
+    ---| 1073741824 AntiRadarMissile2
+    ---| 8589934592 Decoys
+    ---| 1572864 GuidedASM (LaserASM + TeleASM)
+    ---| 1835008 TacticalASM (GuidedASM + FireAndForgetASM)
+    ---| 4161536 AnyASM (AntiRadarMissile + AntiShipMissile + AntiTankMissile + FireAndForgetASM + GuidedASM + CruiseMissile)
+    ---| 4194304 SRAAM
+    ---| 8388608 MRAAM 
+    ---| 16777216 LRAAM
+    ---| 33554432 IR_AAM
+    ---| 67108864 SAR_AAM
+    ---| 134217728 AR_AAM
+    ---| 264241152 AnyAMM(IR_AAM + SAR_AAM + AR_AAM + SRAAM + MRAAM + LRAAM)
+    ---| 268402688 AnyMissile (ASM + AnyAAM)   
+    ---| 36012032 AnyAutonomousMissile (IR_AAM + AntiRadarMissile + AntiShipMissile + FireAndForgetASM + CruiseMissile)
+    ---| 268435456 GUN_POD
+    ---| 536870912 BuiltInCannon
+    ---| 805306368 Cannons (GUN_POD + BuiltInCannon)
+    ---| 17179869184 SmokeShell
+    ---| 34359738368 Illumination Shell
+    ---| 51539607552 MarkerShell
+    ---| 68719476736 SubmunitionDispenserShell
+    ---| 137438953472 GuidedShell
+    ---| 206963736576 ConventionalShell
+    ---| 258503344128 AnyShell
+    ---| 4294967296 Torpedo
+    ---| 2956984318 AnyAGWeapon (BuiltInCannon + GUN_POD + AnyBomb + AnyRocket + AnyASM) 
+    ---| 264241152 AnyAAWeapon (BuiltInCannon + GUN_POD + AnyAAM) 
+    ---| 2952822768 UnguidedWeapon (Cannons + BuiltInCannon + GUN_POD + AnyUnguidedBomb + AnyRocket) 
+    ---| 268402702 GuidedWeapon (GuidedBomb + AnyASM + AnyAAM)
+    ---| 3221225470 AnyWeapon (AnyBomb + AnyRocket + AnyMissile + Cannons) 
+    ---| 13312 MarkerWeapon (MarkerRocket + CandleRocket + CandleBomb) 
+    ---| 209379642366 ArmWeapon (AnyWeapon - MarkerWeapon)
+    
+
+    end
+
     ---@enum GuidanceType
     Weapon.GuidanceType = {
         INS               =   1,
@@ -806,18 +907,18 @@ do --Group
     ---@class Group
     ---@field getByName fun(name:string): Group? gets group by name
     ---@field isExist fun(self:Group) : boolean checks if the Group currently exists
-    ---@field activate fun(self:
-    ---@field destroy
-    ---@field getCategory
-    ---@field getCoalition
-    ---@field getName
-    ---@field getID
-    ---@field getUnit
-    ---@field getUnits
-    ---@field getSize
-    ---@field getInitialSize
-    ---@field getController
-    ---@field enableEmission
+    ---@field activate fun(self:Group) activates the group
+    ---@field destroy fun(self:Group) destroys a group
+    ---@field getCategory fun(self:Group): objectCategory: ObjectCategory, subCategory:number 
+    ---@field getCoalition fun(self:Group): CoalitionSide 
+    ---@field getName fun(self:Group):string
+    ---@field getID fun(self:Group):number
+    ---@field getUnit fun(self:Group, index:number): Unit?
+    ---@field getUnits fun(self:Group): Array<Unit>
+    ---@field getSize fun(self:Group): number
+    ---@field getInitialSize fun(self:Group): number
+    ---@field getController fun(self:Group):Controller
+    ---@field enableEmission fun(self:Group, enabled:boolean)
     Group = Group
 
     ---@enum GroupCategory
