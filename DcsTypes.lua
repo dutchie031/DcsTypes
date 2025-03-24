@@ -591,10 +591,20 @@ do -- Controller
         ---@field groupAttack number?
 
         ---@class Bombing : Task 
-        --[[ 
-            TODO
-        ]]
-            
+        ---@field params BombingTaskParams
+           
+        ---@class BombingTaskParams
+        ---@field point Vec2
+        ---@field attackQty number
+        ---@field weaponType WeaponFlag?
+        ---@field expend AI.Task.WeaponExpend?
+        ---@field attackQtyLimit boolean?
+        ---@field direction number?
+        ---@field groupAttack boolean?
+        ---@field altitude number?
+        ---@field altitudeEnabled boolean?
+        ---@field attackType string "DIVE"
+        
         ---@class Strafing : Task 
         --[[ 
             TODO
