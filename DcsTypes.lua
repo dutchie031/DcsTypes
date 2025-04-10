@@ -40,6 +40,7 @@
 
 do -- env
     ---@class env
+    ---@field mission table TODO: Mission
     ---@field info fun(log:string, showMessageBox:boolean?) Prints passed log line with prefix 'info'
     ---@field warning fun(log:string, showMessageBox:boolean?) Prints passed log line with prefix 'warning'
     ---@field error fun(log:string, showMessageBox:boolean?) Prints passed log line with prefix 'error'
