@@ -947,6 +947,7 @@ end
 
 do --Unit
     ---@class Unit : CoalitionObject
+    ---@field Category UnitCategory
     ---@field getByName fun(name: string): Unit?
     ---@field getDescByName fun(typeName: string): table?
     ---@field isActive fun(self:Unit): boolean Returns a boolean value if the unit is activated
@@ -971,6 +972,14 @@ do --Unit
     ---@field getDescentCapacity fun(self:Unit):number Returns the number of infantry that can be embark onto the aircraft.
     Unit = Unit
 
+    ---@enum UnitCategory
+    Unit.Category = {
+        AIRPLANE      = 0,
+        HELICOPTER    = 1,
+        GROUND_UNIT   = 2,
+        SHIP          = 3,
+        STRUCTURE     = 4
+    }
 
     ---@enum SensorType
     Unit.SensorType = {
