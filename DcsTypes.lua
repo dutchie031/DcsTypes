@@ -25,9 +25,12 @@
 ---@field x number directed to the north
 ---@field y number directed to the east
 ---@field z number directed up (away from ground)
-
----@class Position : Vec3
+ 
+---@class Position
 ---@field p Vec3 Point on map
+---@field x Vec3 Direction vector
+---@field y Vec3 Direction vector
+---@field z Vec3 Direction vector
 
 ---@class Array<T>: { [number]: T }
 
@@ -40,6 +43,8 @@
 
 do -- env
     ---@class env
+    ---@field mission table TODO: Mission
+    ---@field warehouses table
     ---@field info fun(log:string, showMessageBox:boolean?) Prints passed log line with prefix 'info'
     ---@field warning fun(log:string, showMessageBox:boolean?) Prints passed log line with prefix 'warning'
     ---@field error fun(log:string, showMessageBox:boolean?) Prints passed log line with prefix 'error'
@@ -53,7 +58,7 @@ do -- timer
     ---@field getTime fun() : number returns the time in the mission (in seconds. 3 decimals)
     ---@field getAbsTime fun() : number returns the real time in seconds. 0 for midnight, 43200 for noon
     ---@field getTime0 fun() : number returns the mission start time in seconds
-    ---@field scheduleFunction fun(functionToCall: function, arguments: table|nil, modelTime: number) : number schedule the function to be run at 'modelTime' and returns the functionID
+    ---@field scheduleFunction fun(functionToCall: function, arguments: any|nil, modelTime: number) : number schedule the function to be run at 'modelTime' and returns the functionID
     ---@field removeFunction fun(functionID:number) removes a scheduled function from the scheduler
     ---@field setFunctionTime fun(functionID:number, modelTime:number) reschedules an scheduled function
     timer = timer
@@ -214,14 +219,14 @@ do -- world
         ---@field min Vec3
         ---@field max Vec3
 
-        ---@class Sphere
+        ---@class Sphere : Volume
         ---@field params SphereParams
 
         ---@class SphereParams
         ---@field point Vec3
         ---@field radius number
 
-        ---@class VolumePyramid
+        ---@class VolumePyramid : Volume
         ---@field params VolumePyramidParams
 
         ---@class VolumePyramidParams
@@ -346,7 +351,7 @@ do -- trigger
     ---@class MarkCommands
     ---@field markToAll fun(id: number, text:string, point:Vec3, readOnly: boolean?, message: string?) Adds a mark point to all on the F10 map with attached text.
     ---@field markToCoalition fun(id: number, text: string, point: Vec3, coalitionID: CoalitionSide, readOnly: boolean?, message: string) Adds a mark point to a coalition on the F10 map with attached text.
-    ---@field markToGroup fun(id: number, text: string, point: Vec3, groupID: number, readOnly: boolean?, message: string) Adds a mark point to a group on the F10 map with attached text.
+    ---@field markToGroup fun(id: number, text: string, point: Vec3, groupID: number, readOnly: boolean?, message: string?) Adds a mark point to a group on the F10 map with attached text.
     ---@field removeMark fun(id: number) Removes a mark panel from the f10 map
     ---@field markupToAll fun(shapeID: ShapeId, coalition: DrawCoalition, id: number, ... : any) Complex parameters.  <br/> See: https://wiki.hoggitworld.com/view/DCS_func_markupToAll
     ---@field lineToAll fun(coalition: DrawCoalition, id: number, startPoint:Vec3, endPoint: Vec3, color:table, lineType: LineType, readonly: boolean?, message: string?) Creates a line on the F10 map from one point to another.
@@ -537,8 +542,26 @@ end
 
 do -- Controller
     ---@class Controller
+    ---@field setTask fun(self:Controller, task: Task) Sets the task of the controller to the passed task
+    ---@field setCommand function
+    ---@field getDetectedTargets fun(self:Controller, type1: DetectionType, type2: DetectionType, type3: DetectionType) : Array<DetectedObject> Returns a list of units that are detected by the controller. <br>Only works for unit controllers, not group controllers.
     Controller = Controller
 
+    ---@enum DetectionType
+    Controller.Detection = {
+        VISUAL = 1,
+        OPTIC  = 2,
+        RADAR  = 4,
+        IRST   = 8,
+        RWR    = 16,
+        DLINK  = 32
+    }
+
+    ---@class DetectedObject
+    ---@field object Object
+    ---@field visible boolean
+    ---@field type boolean
+    ---@field distance boolean
 
     ---@alias TaskType
     ---| "NoTask"
@@ -957,6 +980,7 @@ end
 
 do --Unit
     ---@class Unit : CoalitionObject
+    ---@field Category UnitCategory
     ---@field getByName fun(name: string): Unit?
     ---@field getDescByName fun(typeName: string): table?
     ---@field isActive fun(self:Unit): boolean Returns a boolean value if the unit is activated
@@ -981,6 +1005,14 @@ do --Unit
     ---@field getDescentCapacity fun(self:Unit):number Returns the number of infantry that can be embark onto the aircraft.
     Unit = Unit
 
+    ---@enum UnitCategory
+    Unit.Category = {
+        AIRPLANE      = 0,
+        HELICOPTER    = 1,
+        GROUND_UNIT   = 2,
+        SHIP          = 3,
+        STRUCTURE     = 4
+    }
 
     ---@enum SensorType
     Unit.SensorType = {
